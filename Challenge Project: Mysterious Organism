@@ -38,7 +38,7 @@ function pAequorFactory(num, bases) {
       return (counter / 15) * 100
     },
     willLikelySurvive() {
-      return (this.dna.filter(x => x == "C" || x == "G").length >= 6)
+      return (this.dna.filter(x => x == "C" || x == "G").length >= 9)
     },
     complementStrand() {
       return this.dna.map(x => {
@@ -61,7 +61,7 @@ function pAequorFactory(num, bases) {
 
 let studies = []
 let num = 1
-while (studies.length <= 30) {
+while (studies.length < 30) {
   let obj1 = pAequorFactory(num, mockUpStrand())
   if (obj1.willLikelySurvive()) {
     studies.push(obj1)
