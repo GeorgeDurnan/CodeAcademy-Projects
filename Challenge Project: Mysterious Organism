@@ -1,0 +1,91 @@
+// Returns a random DNA base
+const returnRandBase = () => {
+  const dnaBases = ['A', 'T', 'C', 'G']
+  return dnaBases[Math.floor(Math.random() * 4)]
+}
+const returnRandBaseWithout = letter => {
+  const dnaBases = ['A', 'T', 'C', 'G']
+  dnaBases.splice(dnaBases.indexOf(letter), 1)
+  return dnaBases[Math.floor(Math.random() * 3)]
+}
+
+// Returns a random single strand of DNA containing 15 bases
+const mockUpStrand = () => {
+  const newStrand = []
+  for (let i = 0; i < 15; i++) {
+    newStrand.push(returnRandBase())
+  }
+  return newStrand
+}
+function pAequorFactory(num, bases) {
+
+  return {
+    specimenNum: num,
+    dna: bases,
+    mutate() {
+      const index = Math.floor(Math.random() * 15)
+      this.dna[index] = returnRandBaseWithout(this.dna[index])
+      return this.dna
+    },
+    compareDNA(obj) {
+      let counter = 0
+      for (let i = 0; i < 15; i++) {
+        if (obj.dna[i] === this.dna[i]) {
+          counter++
+        }
+      }
+      console.log(`specimen #${this.specimenNum} and specimen #${obj.specimenNum} have ${(counter / 15) * 100}% DNA in common`)
+      return (counter / 15) * 100
+    },
+    willLikelySurvive() {
+      return (this.dna.filter(x => x == "C" || x == "G").length >= 6)
+    },
+    complementStrand() {
+      return this.dna.map(x => {
+        switch (x) {
+          case ("A"):
+            return "T"
+          case ("T"):
+            return "A"
+          case ("C"):
+            return "G"
+          case ("G"):
+            return "C"
+        }
+      }
+      )
+      return copy
+    }
+  }
+}
+
+let studies = []
+let num = 1
+while (studies.length <= 30) {
+  let obj1 = pAequorFactory(num, mockUpStrand())
+  if (obj1.willLikelySurvive()) {
+    studies.push(obj1)
+    num++
+  }
+}
+console.log(studies)
+
+let obj2 = pAequorFactory(num, mockUpStrand())
+
+console.log(obj2.complementStrand())
+console.log(obj2.dna)
+let similarity = 0
+let dna1 = []
+let dna2 = []
+for(let i = 0; i < studies.length - 2; i++){
+  for(let x = i + 1; x < studies.length - 1; x ++){
+    if(studies[i].compareDNA(studies[x])> similarity ){
+      dna1 = studies[i]
+      dna2 = studies[x]
+      similarity = studies[i].compareDNA(studies[x])
+    }
+  }
+}
+console.log(`The most similar dnas are dna${dna1.specimenNum} and dna${dna2.specimenNum} they are ${similarity}% similar`)
+
+
